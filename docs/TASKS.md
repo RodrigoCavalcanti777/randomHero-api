@@ -15,11 +15,13 @@ Como pedir: *"Leia o AGENTS.md e o docs/SPEC.md e execute a tarefa N do docs/TAS
 - `src/config/env.js`: carrega o `.env` e valida `SUPABASE_URL` e `SUPABASE_SECRET_KEY` (erro claro se faltarem); `PORT` padrão `3000`.
 - `src/app.js` (monta o Express, `express.json()`) e `src/server.js` (`app.listen`).
 - `GET /health` conforme o SPEC.
-- Criar `.env.example` (só nomes das variáveis, sem valores) e conferir que `.gitignore` ignora `.env` e `node_modules`.
+- Criar `.env.example` (só nomes das variáveis, sem valores).
+- Garantir que o `.gitignore` (criar se não existir, ou **acrescentar** as linhas que faltarem, sem apagar as existentes) contenha estas entradas: `node_modules`, `package-lock.json` e `.env`.
 - README curto: o que é, como instalar e como rodar.
 
 **Pronto quando**
 - `npm run dev` sobe a API e `curl localhost:3000/health` retorna `{"status":"ok"}`.
+- `git status` **não** lista `node_modules`, `package-lock.json` nem `.env`.
 
 ---
 
