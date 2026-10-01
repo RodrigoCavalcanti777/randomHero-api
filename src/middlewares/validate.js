@@ -5,7 +5,11 @@ export const validate = (schema, source = 'body') => {
   return (req, res, next) => {
     try {
       const data = req[source];
-      schema.parse(data);
+      const parsed = schema.parse(data);
+      Object.assign(req[source], parsed);
+      if (source === 'query') req.validatedQuery = parsed;
+      else if (source === 'body') req.validatedBody = parsed;
+      else if (source === 'params') req.validatedParams = parsed;
       next();
     } catch (error) {
       const details = [];
