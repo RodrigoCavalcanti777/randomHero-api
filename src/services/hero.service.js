@@ -27,4 +27,13 @@ export const heroService = {
     }
     return hero;
   },
+
+  async updateHero(id, data) {
+    const hero = await heroRepository.update(id, data);
+    if (!hero) {
+      const { AppError } = await import('../errors/app-error.js');
+      throw new AppError({ status: 404, code: 'NOT_FOUND', message: 'Personagem não encontrado.' });
+    }
+    return hero;
+  },
 };

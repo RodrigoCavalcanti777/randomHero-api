@@ -78,9 +78,10 @@ export const heroRepository = {
   },
 
   async update(id, data) {
+    const payload = { ...data, updated_at: new Date().toISOString() };
     const { data: result, error } = await supabase
       .from('heroes')
-      .update(data)
+      .update(payload)
       .eq('id', id)
       .select()
       .single();

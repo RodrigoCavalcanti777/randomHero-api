@@ -28,4 +28,13 @@ export const heroController = {
       next(error);
     }
   },
+
+  async update(req, res, next) {
+    try {
+      const hero = await heroService.updateHero(req.validatedParams.id, req.validatedBody);
+      res.status(200).json(hero);
+    } catch (error) {
+      next(error);
+    }
+  },
 };
