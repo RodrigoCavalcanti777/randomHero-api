@@ -1,7 +1,17 @@
 // src/controllers/hero.controller.js
 import { heroService } from '../services/hero.service.js';
+import { generatorService } from '../services/generator.service.js';
 
 export const heroController = {
+  async generate(req, res, next) {
+    try {
+      const hero = await generatorService.generateHero(req.validatedBody ?? req.body);
+      res.status(201).json(hero);
+    } catch (error) {
+      next(error);
+    }
+  },
+
   async create(req, res, next) {
     try {
       const hero = await heroService.createHero(req.body);
