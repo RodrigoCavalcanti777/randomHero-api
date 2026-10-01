@@ -20,6 +20,15 @@ export const heroController = {
     }
   },
 
+  async getRandom(req, res, next) {
+    try {
+      const hero = await heroService.getRandomHero(req.validatedQuery ?? req.query);
+      res.status(200).json(hero);
+    } catch (error) {
+      next(error);
+    }
+  },
+
   async getById(req, res, next) {
     try {
       const hero = await heroService.getHeroById(req.validatedParams.id);

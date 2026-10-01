@@ -19,6 +19,15 @@ export const heroService = {
     };
   },
 
+  async getRandomHero({ alignment }) {
+    const hero = await heroRepository.findRandom({ alignment });
+    if (!hero) {
+      const { AppError } = await import('../errors/app-error.js');
+      throw new AppError({ status: 404, code: 'NOT_FOUND', message: 'Personagem não encontrado.' });
+    }
+    return hero;
+  },
+
   async getHeroById(id) {
     const hero = await heroRepository.findById(id);
     if (!hero) {

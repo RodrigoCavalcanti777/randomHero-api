@@ -125,7 +125,7 @@ export const heroRepository = {
   },
 
   async findRandom({ alignment }) {
-    let query = supabase.from('heroes').select('*').order('random()').limit(1);
+    let query = supabase.from('heroes').select('*');
 
     if (alignment) {
       query = query.eq('alignment', alignment);
@@ -141,6 +141,11 @@ export const heroRepository = {
       });
     }
 
-    return data[0] || null;
+    if (!data || data.length === 0) {
+      return null;
+    }
+
+    const index = Math.floor(Math.random() * data.length);
+    return data[index];
   },
 };
