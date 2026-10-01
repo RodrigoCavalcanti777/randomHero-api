@@ -37,4 +37,13 @@ export const heroController = {
       next(error);
     }
   },
+
+  async delete(req, res, next) {
+    try {
+      await heroService.deleteHero(req.validatedParams.id);
+      res.status(204).send();
+    } catch (error) {
+      next(error);
+    }
+  },
 };
