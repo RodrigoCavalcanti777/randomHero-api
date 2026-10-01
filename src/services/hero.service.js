@@ -18,4 +18,13 @@ export const heroService = {
       totalPages,
     };
   },
+
+  async getHeroById(id) {
+    const hero = await heroRepository.findById(id);
+    if (!hero) {
+      const { AppError } = await import('../errors/app-error.js');
+      throw new AppError({ status: 404, code: 'NOT_FOUND', message: 'Personagem não encontrado.' });
+    }
+    return hero;
+  },
 };

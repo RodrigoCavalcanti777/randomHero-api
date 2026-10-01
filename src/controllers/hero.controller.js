@@ -19,4 +19,13 @@ export const heroController = {
       next(error);
     }
   },
+
+  async getById(req, res, next) {
+    try {
+      const hero = await heroService.getHeroById(req.validatedParams.id);
+      res.status(200).json(hero);
+    } catch (error) {
+      next(error);
+    }
+  },
 };

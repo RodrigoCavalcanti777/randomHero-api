@@ -4,8 +4,8 @@ import { z } from 'zod';
 export const createHeroSchema = z.object({
   name: z.string().trim().min(2, { message: 'Nome deve ter ao menos 2 caracteres' }).max(50, { message: 'Nome deve ter no máximo 50 caracteres' }),
   age: z.number().int().min(1, { message: 'Idade deve ser maior que 0' }).max(10000, { message: 'Idade não pode ser maior que 10000' }),
-  gender: z.string().trim().min(1, { message: 'Gênero deve ter ao menos 1 caractere' }).max(30, { message: 'Gênero não pode ter mais de 30 caracteres' }),
-  ability: z.string().trim().min(1, { message: 'Habilidade deve ter ao menos 1 caractere' }).max(200, { message: 'Habilidade não pode ter mais de 200 caracteres' }),
+  gender: z.string().trim().min(1, { message: 'Gênero deve ter ao menos 1 caractere' }).max(30, { message: 'Gênero não pode ser maior de 30 caracteres' }),
+  ability: z.string().trim().min(1, { message: 'Habilidade deve ter ao menos 1 caractere' }).max(200, { message: 'Habilidade não pode ser maior que 200 caracteres' }),
   alignment: z.enum(['hero', 'villain']),
   power: z.number().int().min(1, { message: 'Power deve ser maior que 0' }).max(100, { message: 'Power não pode ser maior que 100' }),
   background: z.string().trim().max(500, { message: 'Background não pode ter mais de 500 caracteres' }).nullable().optional(),
@@ -15,13 +15,15 @@ export const generateHeroSchema = z.object({
   name: z.string().trim().min(2, { message: 'Nome deve ter ao menos 2 caracteres' }).max(50, { message: 'Nome deve ter no máximo 50 caracteres' }).optional(),
   age: z.number().int().min(16, { message: 'Idade deve ser maior que 15' }).max(900, { message: 'Idade não pode ser maior que 900' }).optional(),
   gender: z.enum(['male', 'female', 'other']).optional(),
-  ability: z.string().trim().min(1, { message: 'Habilidade deve ter ao menos 1 caractere' }).max(200, { message: 'Habilidade não pode ter mais de 200 caracteres' }).optional(),
+  ability: z.string().trim().min(1, { message: 'Habilidade deve ter ao menos 1 caractere' }).max(200, { message: 'Habilidade não pode ser maior que 200 caracteres' }).optional(),
   background: z.string().trim().max(500, { message: 'Background não pode ter mais de 500 caracteres' }).nullable().optional(),
   alignment: z.enum(['hero', 'villain']).optional(),
   power: z.number().int().min(1, { message: 'Power deve ser maior que 0' }).max(100, { message: 'Power não pode ser maior que 100' }).optional(),
 }).strict();
 
-export const idParamSchema = z.coerce.number().int().positive({ message: 'ID deve ser um inteiro positivo' });
+export const idParamSchema = z.object({
+  id: z.coerce.number().int().positive({ message: 'ID deve ser um inteiro positivo' }),
+});
 
 export const listQuerySchema = z.object({
   alignment: z.enum(['hero', 'villain']).optional(),
