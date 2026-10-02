@@ -112,12 +112,26 @@ A API sobe em `http://localhost:3000`.
 
 ## 📚 Endpoints
 
-### Health
+> **Nota sobre os arquivos de rota:** cada arquivo em `src/routes/` define o caminho **relativo** daquele recurso (ex.: `router.get('/random', ...)` dentro de `hero.routes.js`). O prefixo final (`/hero`, `/battle`, `/health`) é definido uma única vez em `src/app.js`, com `app.use("/hero", heroRoutes)`. Por isso `battle.routes.js` não contém a palavra `/battle` em nenhuma rota — o prefixo vem de fora do arquivo.
+
+| Arquivo de rota | Prefixo (`app.js`) | Caminhos definidos dentro do arquivo |
+|---|---|---|
+| `health.routes.js` | `/health` | `GET /` → `GET /health` |
+| `hero.routes.js` | `/hero` | `GET /random`, `GET /:id`, `POST /`, `PUT /:id`, `DELETE /:id`, `POST /generate` |
+| `battle.routes.js` | `/battle` | `GET /` → `GET /battle` |
+
+### 🩺 Health
+
 | Método | Rota | Descrição |
 |---|---|---|
 | `GET` | `/health` | Verifica se a API está no ar |
 
-### Heróis
+```bash
+curl http://localhost:3000/health
+```
+
+### 🦸 Heróis
+
 | Método | Rota | Descrição |
 |---|---|---|
 | `POST` | `/hero` | Cadastra um personagem |
@@ -128,10 +142,47 @@ A API sobe em `http://localhost:3000`.
 | `DELETE` | `/hero/:id` | Exclui um personagem |
 | `POST` | `/hero/generate` | Gera e cadastra um personagem com dados aleatórios |
 
-### Batalha
+```bash
+# Cadastrar
+curl -X POST http://localhost:3000/hero \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Thor","age":1500,"gender":"male","ability":"Controla raios","alignment":"hero","power":92}'
+
+# Listar (com filtro e paginação)
+curl "http://localhost:3000/hero?alignment=hero&page=1&limit=10"
+
+# Sortear um já cadastrado
+curl "http://localhost:3000/hero/random?alignment=hero"
+
+# Buscar por id
+curl http://localhost:3000/hero/1
+
+# Atualizar (substitui todos os campos)
+curl -X PUT http://localhost:3000/hero/1 \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Thor Odinson","age":1500,"gender":"male","ability":"Controla raios","alignment":"hero","power":95}'
+
+# Excluir
+curl -X DELETE http://localhost:3000/hero/1
+
+# Gerar aleatório (corpo opcional, pode fixar campos)
+curl -X POST http://localhost:3000/hero/generate \
+  -H "Content-Type: application/json" \
+  -d '{"alignment":"villain"}'
+```
+
+### ⚔️ Batalha
+
 | Método | Rota | Descrição |
 |---|---|---|
-| `GET` | `/battle?hero1=&hero2=` | Simula uma batalha entre dois personagens |
+| `GET` | `/battle?hero1=&hero2=` | Simula uma batalha entre dois personagens (maior `power` vence; empate é decidido por sorteio) |
+
+> ⚠️ `hero1` e `hero2` são **obrigatórios**. Chamar `GET /battle` sozinho, sem os dois parâmetros, retorna `400 VALIDATION_ERROR`. Os ids também precisam ser diferentes entre si.
+
+```bash
+# Rota correta, com os dois ids informados
+curl "http://localhost:3000/battle?hero1=1&hero2=5"
+```
 
 📄 Contrato completo, regras de validação e formato de erros: [`docs/SPEC.md`](./docs/SPEC.md).
 
